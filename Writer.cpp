@@ -5,8 +5,10 @@
 
 using namespace std;
 
-struct MyShared{
-	
+struct MyShared {
+	int threadId;
+	int reportId;
+	int delay;
 };
 
 int main(void)
@@ -69,7 +71,6 @@ class WriterThread : public Thread{
 		}
 
 		virtual long ThreadMain(void) override{
-			//declare shared memory var so this thread can access it
 			Shared<MyShared> sharedMemory ("sharedMemory");
 			while(true)
 			{
@@ -77,12 +78,14 @@ class WriterThread : public Thread{
 				sleep(delay);
 				time_t time_2 = time(NULL);
 
-				int timediff = time_2 - time_1;
+				int time_diff = time_2 - time_1;
 				this->reportId++;
 
-				//DOING STUFF HERE
+				//Write to shared memory
+				sharedMemory->threadId=threadNum;
+				sharedMemory->reportId=reportId;
+				sharedMemory->delay=time_diff;
 
-				//write to shared memory
 				if(flag){//Exit loop to end the thread
 					break;
 				}
