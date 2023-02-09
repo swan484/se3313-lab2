@@ -11,47 +11,6 @@ struct MyShared {
 	int delay;
 };
 
-int main(void)
-{
-	string userText;
-	string delayLength;
-	int threadCount = 0;
-	WriterThread* thread;
-	stack<WriterThread*> threadStack;
-	Shared<MyShared> shared("sharedMemory", true);
-	cout << "I am a writer" << endl;
-
-	////////////////////////////////////////////////////////////////////////
-	// This is a possible starting point for using threads and shared memory. 
-	// You do not have to start with this
-	////////////////////////////////////////////////////////////////////////
-
-	while(true){
-		cout << "Do you want to make a new thread? [y/n]" << endl;
-		getline(cin, userText);
-
-		if(userText == "y"){
-			cout << "What do you want the wait time to be?" << endl;
-			getline(cin, delayLength);
-
-			int delay = stoi(delayLength);
-			thread = new WriterThread(++threadCount, delay, 0);
-			threadStack.push(thread);
-		}
-		else {
-			break;
-		}
-	}
-	
-	int i = 0;
-	for(i; i < threadStack.size(); i++){
-		thread = threadStack.top();
-		thread->flag = true;
-		delete thread;
-		threadStack.pop();
-	}
-}
-
 
 ////////////////////////////////////////////////////////////////////////
 // This is a possible starting point for using threads and shared memory. 
@@ -92,3 +51,44 @@ class WriterThread : public Thread{
 			}
 		}
 };
+
+int main(void)
+{
+	string userText;
+	string delayLength;
+	int threadCount = 0;
+	WriterThread* thread;
+	stack<WriterThread*> threadStack;
+	Shared<MyShared> shared("sharedMemory", true);
+	cout << "I am a writer" << endl;
+
+	////////////////////////////////////////////////////////////////////////
+	// This is a possible starting point for using threads and shared memory. 
+	// You do not have to start with this
+	////////////////////////////////////////////////////////////////////////
+
+	while(true){
+		cout << "Do you want to make a new thread? [y/n] " << endl;
+		getline(cin, userText);
+
+		if(userText == "y"){
+			cout << "What do you want the wait time to be? " << endl;
+			getline(cin, delayLength);
+
+			int delay = stoi(delayLength);
+			thread = new WriterThread(++threadCount, delay, 0);
+			threadStack.push(thread);
+		}
+		else {
+			break;
+		}
+	}
+	
+	int i = 0;
+	while(i++ < threadStack.size()){
+		thread = threadStack.top();
+		thread->flag = true;
+		delete thread;
+		threadStack.pop();
+	}
+}
