@@ -3,15 +3,18 @@
 #include <semaphore.h>
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>        /* For mode constants */
+#include <iostream>
+
+using namespace std;
 
 class Semaphore
 {
 private:
     sem_t * pSem;
     bool owner;
-    std::string fullName;
+    string fullName;
 public:
-    Semaphore(std::string const & name,int initialState = 0, bool createAsOwner = false)
+    Semaphore(string const & name,int initialState = 0, bool createAsOwner = false)
         : owner(createAsOwner),fullName("/"+name)
     {
         if (createAsOwner)
@@ -22,7 +25,7 @@ public:
         else
             pSem=sem_open(fullName.c_str(),0);
         if (pSem == SEM_FAILED)
-            throw std::string("Couldn't create semaphore");
+            throw string("Couldn't create semaphore");
     }
     virtual ~Semaphore(void)
     {
