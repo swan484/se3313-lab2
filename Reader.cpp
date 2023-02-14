@@ -18,9 +18,9 @@ int main(void)
 	Shared<MyShared> shared("sharedMemory", false);
 
 	//Create 'block' semaphore to block access to shared data
-	Semaphore block("block", 1, true);
+	Semaphore block("block", 1, false);
 	//Create 's' semaphore to signal when shared data was changed
-	Semaphore s("s", 1, true);
+	Semaphore s("s", 1, false);
 
 	while(true){
 		//Wait for the shared data to change
