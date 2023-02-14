@@ -101,11 +101,13 @@ int main(void)
 	}
 	
 	//For each thread, end its execution (by setting flag to true), deleting it, and popping it from the stack
-	int i = 0;
-	while(i++ < threadStack.size()){
+	while(!threadStack.empty()){
 		thread = threadStack.top();
+		cout << "Deleting thread number " << thread->threadNum << endl;
 		thread->flag = true;
 		delete thread;
 		threadStack.pop();
 	}
+
+	cout << "Program Finished!" << endl;
 }
